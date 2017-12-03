@@ -30,7 +30,9 @@ InPro scrapes financial information from internet property brokerages and stores
 
 # Deployment
 
-To do
+1. Build tools: Install docker & docker-compose
+2. Build: sudo docker-compose up -d
+3. Start services: sudo docker-compose start
 
 # Next steps
 

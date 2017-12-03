@@ -1,0 +1,30 @@
+version: '2'  
+services:  
+  db:
+    container_name: postgres
+    image: postgres:latest
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - "8000:8000"
+    # volumes:
+    #   - ./src:/src
+    #   - ./config/nginx:/etc/nginx/conf.d
+  scrape:
+    container_name: scrape
+    build:
+      context: ./scrape
+      dockerfile: ./Dockerfile
+    command: ls
+  # web:
+  #   container_name: web
+  #   build: deploy/web
+  #   command: bash -c "python manage.py makemigrations && python manage.py migrate && uwsgi mydjango.wsgi -b 0.0.0.0:8000"
+  #   depends_on:
+  #     - db
+  #     - nginx
+  #   volumes:
+  #     - ./src:/src
+  #   expose:
+  #     - "8000"
