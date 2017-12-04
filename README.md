@@ -2,7 +2,7 @@
 
 InPro scrapes financial information from internet property brokerages and stores the data in a local database. Valuation analyses, visualizations and alerting can be performed on the scraped data.
 
-<br />
+
 ## Data sources
 
 * https://empireflippers.com/
@@ -10,7 +10,6 @@ InPro scrapes financial information from internet property brokerages and stores
 * https://feinternational.com/buy-a-website/
 
 
-<br />
 ## Requirements
 
 * Analytics: Sharpe ratios, multiples (eg. P/E), moment calculations (eg. standard deviation, skewness, kurtosis)
@@ -18,7 +17,6 @@ InPro scrapes financial information from internet property brokerages and stores
 * Alerting: new internet properties generate email reports if they are potential opportunities
 
 
-<br />
 ## Technical stack
 
 #### Backend services
@@ -33,7 +31,6 @@ InPro scrapes financial information from internet property brokerages and stores
 * CSS framework: bootstrap 3
 * Visualizaton: Charts.js
 
-<br />
 ## Deployment
 
 1. Build tools: Install docker & docker-compose
@@ -41,7 +38,6 @@ InPro scrapes financial information from internet property brokerages and stores
 3. Start services: `sudo docker-compose start`
 
 
-<br />
 ## Next steps
 
 1. Set up dockerized containers for services (nginx, django, scrapy, postgres)
