@@ -41,18 +41,19 @@ class EmpireSpider(scrapy.Spider):
         second_batch = extract_json(split[2], 23)
         all_items = first_batch + second_batch
 
-        from scrapy.shell import inspect_response
-        inspect_response(response, self)
-
         # Iterate over items
-        for item in first:
-            if item.get('detail'):
-                yield response.follow(url=item['detail'],
-                                      callback=self.parse_detail)
-            else:
-                yield item
+        for item in all_items:
+            # url = 'https://empireflippers.com/listing/{}'
+            # yield response.follow(url=url.format(item['listing_id']),
+            #                       callback=self.parse_detail)
+
+            yield item
+
+
+        # from scrapy.shell import inspect_response
+        # inspect_response(response, self)
 
 
     def parse_detail(self, response):
         """Parses an internet property detail page"""
-        raise NotImplementedError
+        yield 'got here to {}'.format(self.url)
