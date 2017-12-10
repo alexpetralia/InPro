@@ -64,7 +64,7 @@ class EmpireSpider(scrapy.Spider):
         all_items = first_batch + second_batch
 
         # Iterate over items
-        for item in all_items[:300]:
+        for item in all_items:
             # Follow detail page
             if item['listing_id'] not in detail_ids:
                 url = 'https://empireflippers.com/listing/{}'

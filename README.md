@@ -38,6 +38,7 @@ InPro scrapes financial information from internet property brokerages and stores
 2. Build: `sudo docker-compose up` (in a tmux window)
 
 * Changes to the docker-compose.yaml file force a rebuild of the images, use: `sudo docker-compose up -d --build <image>`
+* Never use `sudo docker-compose down` unless you want to destroy docker images. Instead use `sudo docker-compose stop`
 
 ## Next steps
 
