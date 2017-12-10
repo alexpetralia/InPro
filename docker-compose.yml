@@ -1,22 +1,45 @@
 version: '2'  
 services:  
-  db:
+  postgres:
     container_name: postgres
     image: postgres:latest
+    ports:
+      - "127.0.0.1:5432:5432" # host:node
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest # :3.0.2
+    environment:
+      - MONGO_DATA_DIR:/data/mongodb
+      - MONGO_LOG_DIR:/dev/null
+    volumes:
+      - ./data/mongodb:/data/mongodb
+    ports:
+      - "127.0.0.1:27017:27017"
+    command:
+      - '--bind_ip=0.0.0.0 --smallfiles' # appends as args to entrypoint
+    environment:
+      - MONGO_DBNAME=data
   nginx:
     container_name: nginx
     image: nginx:latest
     ports:
-      - "8000:8000"
-    # volumes:
-    #   - ./src:/src
-    #   - ./config/nginx:/etc/nginx/conf.d
+      - "127.0.0.1:80:80"
+    volumes:
+      - ./src:/src
+    command: /bin/bash -c "nginx -g 'daemon off;'"
   scrape:
     container_name: scrape
     build:
       context: ./scrape
       dockerfile: ./Dockerfile
-    command: ls
+    command: "tail -f /dev/null"
+    links:
+      - mongodb:mongodb
+      - postgres:postgres
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URL=mongodb:27017
   # web:
   #   container_name: web
   #   build: deploy/web

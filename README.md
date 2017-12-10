@@ -22,7 +22,8 @@ InPro scrapes financial information from internet property brokerages and stores
 #### Backend services
 * Deployment: docker
 * Scraping: (a) scrapy scripers and (b) ad hoc scripts using requests
-* Database: postgres
+* <s>Database: postgres</s>
+* Database: MongoDB (due to schemaless nature of source data)
 * Proxy server: nginx
 * Web framework: django via uWSGI
 
@@ -34,13 +35,13 @@ InPro scrapes financial information from internet property brokerages and stores
 ## Deployment
 
 1. Build tools: Install docker & docker-compose
-2. Build: `sudo docker-compose up -d`
-3. Start services: `sudo docker-compose start`
+2. Build: `sudo docker-compose up` (in a tmux window)
 
+* Changes to the docker-compose.yaml file force a rebuild of the images, use: `sudo docker-compose up -d --build <image>`
 
 ## Next steps
 
-1. Set up dockerized containers for services (nginx, django, scrapy, postgres)
+1. <s>Set up dockerized containers for services (nginx, django, scrapy, postgres)</s>
 2. Write the crawlers
 3. Exploratory data analysis - is there anything actually useful here?
 4. Build a GUI via django

@@ -1,5 +1,6 @@
-import scrapy
 import json
+import logging
+import scrapy
 
 def extract_json(str_, st, end=-1):
     """Takes a string and returns a dict object
@@ -19,16 +20,9 @@ class EmpireSpider(scrapy.Spider):
 
     def start_requests(self):
         """Build request messages"""
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36',
-            'referer': 'https://empireflippers.com/'
-        }
-
         start_urls = ['https://empireflippers.com/marketplace/']
         for url in start_urls:
-            yield scrapy.Request(url=url,
-                                 headers=headers,
-                                 callback=self.parse_main)
+            yield scrapy.Request(url=url, callback=self.parse_main)
 
     def parse_main(self, response):
         """Parses the main marketplace page"""
@@ -41,19 +35,21 @@ class EmpireSpider(scrapy.Spider):
         second_batch = extract_json(split[2], 23)
         all_items = first_batch + second_batch
 
-        # Iterate over items
-        for item in all_items:
-            # url = 'https://empireflippers.com/listing/{}'
+        # Iterate over item
+        for item in all_items[:]:
+            url = 'https://empireflippers.com/listing/{}'
             # yield response.follow(url=url.format(item['listing_id']),
             #                       callback=self.parse_detail)
 
             yield item
 
+            # TODO: not persisting
 
         # from scrapy.shell import inspect_response
         # inspect_response(response, self)
-
+        # import pdb; pdb.set_trace();
 
     def parse_detail(self, response):
         """Parses an internet property detail page"""
-        yield 'got here to {}'.format(self.url)
+        print 'got here to {}'.format(response.url)
+        yield {'url': response.url}
