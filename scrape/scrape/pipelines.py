@@ -1,23 +1,27 @@
 # -*- coding: utf-8 -*-
 
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-
 import pymongo
 
-class EmpireFlippersPipeline(object):
+from scrape.spiders.empireflippers import EmpireSpider
+
+class ItemPipeline(object):
 
     def __init__(self):
 
-        client = pymongo.MongoClient('localhost', 27017)
-        self.collection = client['data']['empireflippers_listings']
+        self.client = pymongo.MongoClient('localhost', 27017)
+
+    def open_spider(self, spider):
+        """Passes database object upon opening a new spider"""
+        if isinstance(spider, EmpireSpider):
+            spider.listings_db = self.client['data']['empireflippers_listings']
+            spider.details_db = self.client['data']['empireflippers_details']
 
     def process_item(self, item, spider):
 
-        # self.collection.insert_one(item)
-        # key = {'listing_id': item['listing_id']}
-        # self.collection.update_one(key, {'$set': item}, upsert=True)
+        type_, data = item['type'], item['data']
+        if type_ == 'listing':
+            spider.listings_db.insert_one(data)
+        elif type_ == 'detail':
+            spider.details_db.insert_one(data)
 
         return item

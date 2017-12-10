@@ -24,8 +24,8 @@ services:
     image: nginx:latest
     ports:
       - "127.0.0.1:80:80"
-    volumes:
-      - ./src:/src
+    # volumes:
+    #   - ./src:/src
     command: /bin/bash -c "nginx -g 'daemon off;'"
   scrape:
     container_name: scrape
