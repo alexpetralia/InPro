@@ -1,10 +1,15 @@
-version: '2'  
+version: '2'
+
+volumes: # named volumes are persistent
+    data:
+
 services:  
   postgres:
     container_name: postgres
     image: postgres:latest
     ports:
       - "127.0.0.1:5432:5432" # host:node
+
   mongodb:
     container_name: mongodb
     image: mongo:latest # :3.0.2
@@ -12,13 +17,14 @@ services:
       - MONGO_DATA_DIR:/data/mongodb
       - MONGO_LOG_DIR:/dev/null
     volumes:
-      - ./data/mongodb:/data/mongodb # host:node
+      - data:/data # host:node
     ports:
       - "127.0.0.1:27017:27017"
     command:
       - '--bind_ip=0.0.0.0 --smallfiles' # appends as args to entrypoint
     environment:
       - MONGO_DBNAME=data
+
   nginx:
     container_name: nginx
     image: nginx:latest
@@ -27,6 +33,7 @@ services:
     # volumes:
     #   - ./src:/src
     command: /bin/bash -c "nginx -g 'daemon off;'"
+
   scrape:
     container_name: scrape
     build:
@@ -40,6 +47,7 @@ services:
       - mongodb
     environment:
       - MONGO_URL=mongodb:27017
+
   # web:
   #   container_name: web
   #   build: deploy/web
@@ -51,6 +59,3 @@ services:
   #     - ./src:/src
   #   expose:
   #     - "8000"
-
-# volumes: # named volumes are persistent - in theory
-#     data:

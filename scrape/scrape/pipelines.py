@@ -2,7 +2,7 @@
 
 import pymongo
 
-from scrape.spiders.empireflippers import EmpireSpider
+from scrape.spiders import EmpireSpider, FlippaSpider
 
 class ItemPipeline(object):
 
@@ -15,6 +15,8 @@ class ItemPipeline(object):
         if isinstance(spider, EmpireSpider):
             spider.listings_db = self.client['data']['empireflippers_listings']
             spider.details_db = self.client['data']['empireflippers_details']
+        if isinstance(spider, FlippaSpider):
+            spider.listings_db = self.client['data']['flippa_listings']
 
     def process_item(self, item, spider):
 
