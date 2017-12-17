@@ -36,13 +36,21 @@ InPro scrapes financial information from internet property brokerages and stores
 
 1. Build tools: Install docker & docker-compose
 2. Build: `sudo docker-compose up` (in a tmux window)
+2. Stop: `sudo docker-compose stop` (suspend images) or `down` (destroy images)
 
 * Changes to the docker-compose.yaml file force a rebuild of the images, use: `sudo docker-compose up -d --build <image>`
-* Never use `sudo docker-compose down` unless you want to destroy docker images. Instead use `sudo docker-compose stop`
+
+## Data access
+
+All listing data is stored in `mongodb` on localhost:27017.
+
+You can access this database via the client-side mongo shell with `mongo data` (where the `data` arg selects the data database).
+
+Query using mongodb syntax, eg. `db.find({}).sort({_id: -1}).limit(1)`.
 
 ## Next steps
 
 1. <s>Set up dockerized containers for services (nginx, django, scrapy, postgres)</s>
-2. Write the crawlers
+2. <s>Write the crawlers</s>
 3. Exploratory data analysis - is there anything actually useful here?
 4. Build a GUI via django

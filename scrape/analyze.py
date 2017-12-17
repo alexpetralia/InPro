@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
+import pymongo
 import json
-import os
 
 def lazy_div(df):
     """Divide if possible, else return null"""
@@ -13,8 +13,8 @@ def lazy_div(df):
 def main():
     """Main"""
     PATH = '/home/alex/Desktop/InPro/scrape/lines.json'
-    with open(path, 'r') as f:
-        j = json.load()
+    with open(PATH, 'r') as f:
+        j = json.load(f)
 
     # Get data
     df = pd.DataFrame(j['data'])
@@ -31,6 +31,8 @@ def main():
     y = groups.agg({'avg_pe': np.mean, 'n': np.size})
     y = y[y['n'] >= 3]
     y = y.sort_values('avg_pe')
+
+# TODO: summary statistics, LTM g %, P/E/ewma(g%), margin, returns variability, Sharpe, revenue capture % from uniques)
 
 if __name__ == '__main__':
 

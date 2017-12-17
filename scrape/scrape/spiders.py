@@ -1,9 +1,10 @@
 from functools import partial
 import json
+import os
 import pandas as pd
 import pymongo
-import scrapy
 import re
+import scrapy
 
 # Helper functions
 
@@ -152,7 +153,7 @@ class EmpireSpider(scrapy.Spider):
         all_items = first_batch + second_batch
 
         # Iterate over items
-        for item in all_items:
+        for item in all_items[:]:
             # Generate metadata
             url = 'https://empireflippers.com/listing/{}'
             item['url'] = url.format(item['listing_id'])
@@ -217,7 +218,8 @@ class FlippaSpider(scrapy.Spider):
         `returns`
             (list[str]): list of post IDs
         """
-        client = pymongo.MongoClient('localhost', 27017)
+        host = os.environ.get('MONGO_URL', 'localhost')
+        client = pymongo.MongoClient(host, 27017)
         collection = client['data']['flippa_listings']
         posts = collection.find({})
         return [post['post_id'] for post in posts]

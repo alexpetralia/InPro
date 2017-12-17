@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pymongo
+import os
 
 from scrape.spiders import EmpireSpider, FlippaSpider
 
@@ -8,7 +9,8 @@ class ItemPipeline(object):
 
     def __init__(self):
 
-        self.client = pymongo.MongoClient('localhost', 27017)
+        host = os.environ.get('MONGO_URL', 'localhost')
+        self.client = pymongo.MongoClient(host, 27017)
 
     def open_spider(self, spider):
         """Passes database object upon opening a new spider"""

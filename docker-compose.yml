@@ -1,8 +1,5 @@
 version: '2'
 
-volumes: # named volumes are persistent
-    data:
-
 services:  
   postgres:
     container_name: postgres
@@ -16,8 +13,10 @@ services:
     environment:
       - MONGO_DATA_DIR:/data/mongodb
       - MONGO_LOG_DIR:/dev/null
-    volumes:
-      - data:/data # host:node
+    volumes: # these node volume paths are image-specific; cannot be changed
+      - ./data/mongodb/db:/data/db # host:node
+      - ./data/mongodb/configdb:/data/configdb
+      - ./data/mongodb/backups:/backups
     ports:
       - "127.0.0.1:27017:27017"
     command:
@@ -39,21 +38,22 @@ services:
     build:
       context: ./scrape
       dockerfile: ./Dockerfile
-    command: "tail -f /dev/null"
-    links:
-      - mongodb:mongodb
+    # command: "tail -f /dev/null"
+    command: /bin/bash -c "source venv/bin/activate && scrapy crawl empireflippers && scrapy crawl flippa && python requests/feinternational.py && echo 'Ran scripts!'"
+    links: # resolves cname from another container
+      - mongodb:mongodb # docker service:alias
       - postgres:postgres
     depends_on:
       - mongodb
     environment:
-      - MONGO_URL=mongodb:27017
+      - MONGO_URL=mongodb
 
   # web:
   #   container_name: web
   #   build: deploy/web
   #   command: bash -c "python manage.py makemigrations && python manage.py migrate && uwsgi mydjango.wsgi -b 0.0.0.0:8000"
   #   depends_on:
-  #     - db
+  #     - postgres
   #     - nginx
   #   volumes:
   #     - ./src:/src

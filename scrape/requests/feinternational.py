@@ -1,5 +1,6 @@
-import requests
+import os
 import pymongo
+import requests
 from bs4 import BeautifulSoup
 
 def clean(element, under=False):
@@ -41,7 +42,8 @@ def extract(listing):
 def main():
     """Main thread"""
     # Initialize database
-    client = pymongo.MongoClient('localhost', 27017)
+    host = os.environ.get('MONGO_URL', 'localhost')
+    client = pymongo.MongoClient(host, 27017)
     C = client['data']['fei_listings']
     query = C.find({})
     existing = [x['title'] for x in query]
